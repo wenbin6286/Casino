@@ -39,7 +39,7 @@ public class RPSGame implements IGame{
     private static final int FEE =5 ;//$5 per game per player
     private CountDownLatch latch;
 
-    private AtomicInteger moneyOnTable = new AtomicInteger(0);
+    private AtomicInteger moneyCollected = new AtomicInteger(0);
     private List<IPlayer> players;
 
     RPSGame() {
@@ -67,7 +67,7 @@ public class RPSGame implements IGame{
             if(player == p)
                 throw new AlreadyInGameException();
         }
-        moneyOnTable.addAndGet(player.pay(FEE));
+        moneyCollected.addAndGet(player.pay(FEE));
         players.add(player);
         latch.countDown();
     }
@@ -83,18 +83,18 @@ public class RPSGame implements IGame{
         player2 = players.get(1);
         GameResult result = makeMove(player1.playGame(gameId),player2.playGame(gameId));
         if(result==WIN) {
-            player1.award(moneyOnTable.get());
-            moneyOnTable.set(0);
+            player1.award(moneyCollected.get());
+            moneyCollected.set(0);
         }
         else if(result == LOSE) {
-            player2.award(moneyOnTable.get());
-            moneyOnTable.set(0);
+            player2.award(moneyCollected.get());
+            moneyCollected.set(0);
         }
         else {
             //tie, no action.
         }
         System.out.printf("Game %s is played %n",gameId);
-        return moneyOnTable.get(); //return the remaining money to the dealer;
+        return moneyCollected.get(); //return the remaining money to the dealer;
     }
 
      GameResult makeMove(RPSMove m1, RPSMove m2) {
@@ -104,7 +104,7 @@ public class RPSGame implements IGame{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[GameId = "+gameId).append(" ");
-        sb.append("money = "+ moneyOnTable).append(" ");
+        sb.append("money = "+ moneyCollected).append(" ");
         sb.append("numPlayer = "+players.size()).append("]");
         return sb.toString();
     }
@@ -113,7 +113,7 @@ public class RPSGame implements IGame{
     public List<IPlayer> getPlayers() {
         return players;
     }
-    public int getMoneyOnTable() {
-        return moneyOnTable.get();
+    public int getMoneyCollected() {
+        return moneyCollected.get();
     }
 }
