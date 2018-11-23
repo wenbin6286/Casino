@@ -39,8 +39,8 @@ public class RPSGame implements IGame{
     private static final int FEE =5 ;//$5 per game per player
     private CountDownLatch latch;
 
-    private AtomicInteger moneyCollected = new AtomicInteger(0);
-    private List<IPlayer> players;
+    private final AtomicInteger moneyCollected = new AtomicInteger(0);
+    private final List<IPlayer> players;
 
     RPSGame() {
         this.gameId = GameId.getGameId();
@@ -56,7 +56,7 @@ public class RPSGame implements IGame{
     }
     //protect member players.
     @Override
-    public void joinGame(IPlayer player)
+    public synchronized void joinGame(IPlayer player)
             throws GameFullException, InsufficientFundException, AlreadyInGameException{
 
         if(players.size() == NUM_PLAYER) {

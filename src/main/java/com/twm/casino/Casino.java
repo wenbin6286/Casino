@@ -12,9 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Casino implements ICasino{
     private final int numDealers;
     private final ExecutorService dealerPool;
-    private final ExecutorService playerPool;
-
-
+    private final ExecutorService  playerPool;
     //games ready for players
     private final Map<UUID,IGame> games = new ConcurrentHashMap<>();
     private final Map<UUID,IPlayer> players = new ConcurrentHashMap<>();
@@ -22,8 +20,7 @@ public class Casino implements ICasino{
     public Casino(int numDealers) {
         this. numDealers = numDealers;
         dealerPool = Executors.newFixedThreadPool(numDealers);
-        playerPool = Executors.newFixedThreadPool(numDealers);
-
+        playerPool = Executors.newFixedThreadPool(numDealers*10);
     }
 
     @Override
@@ -51,10 +48,11 @@ public class Casino implements ICasino{
                     Thread.sleep(100);//let player wonder around a bit
                     playGame(player);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                   return; //stop playing if interrupted
                 }
             }
         };
+
         for (int j = 0; j < numGames; j++) {
                 playerPool.execute(r);
             }
@@ -88,11 +86,6 @@ public class Casino implements ICasino{
         System.out.println("Casino is closing");
         playerPool.shutdownNow();
         dealerPool.shutdownNow();
-        try {
-            dealerPool.awaitTermination(1000,TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
     public int getBalance() {
