@@ -39,7 +39,7 @@ public class RPSGame implements IGame{
     private static final int FEE =5 ;//$5 per game per player
     private CountDownLatch latch;
 
-    private final AtomicInteger moneyCollected = new AtomicInteger(0);
+    private volatile int moneyCollected =0;
     private final List<IPlayer> players;
 
     RPSGame() {
@@ -54,7 +54,7 @@ public class RPSGame implements IGame{
     public UUID getGameId() {
         return gameId;
     }
-    //protect member players.
+    //protect moneyCollected and  players.
     @Override
     public synchronized void joinGame(IPlayer player)
             throws GameFullException, InsufficientFundException, AlreadyInGameException{
@@ -67,7 +67,7 @@ public class RPSGame implements IGame{
             if(player == p)
                 throw new AlreadyInGameException();
         }
-        moneyCollected.addAndGet(player.pay(FEE));
+        moneyCollected+=(player.pay(FEE));
         players.add(player);
         latch.countDown();
     }
@@ -83,18 +83,18 @@ public class RPSGame implements IGame{
         player2 = players.get(1);
         GameResult result = makeMove(player1.playGame(gameId),player2.playGame(gameId));
         if(result==WIN) {
-            player1.award(moneyCollected.get());
-            moneyCollected.set(0);
+            player1.award(moneyCollected);
+            moneyCollected= 0;
         }
         else if(result == LOSE) {
-            player2.award(moneyCollected.get());
-            moneyCollected.set(0);
+            player2.award(moneyCollected);
+            moneyCollected=0;
         }
         else {
             //tie, no action.
         }
         System.out.printf("Game %s is played %n",gameId);
-        return moneyCollected.get(); //return the remaining money to the dealer;
+        return moneyCollected; //return the remaining money to the dealer;
     }
 
      GameResult makeMove(RPSMove m1, RPSMove m2) {
@@ -114,6 +114,6 @@ public class RPSGame implements IGame{
         return players;
     }
     public int getMoneyCollected() {
-        return moneyCollected.get();
+        return moneyCollected;
     }
 }
