@@ -1,27 +1,23 @@
 package com.twm.casino;
 
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+
+import static java.lang.Thread.sleep;
+
+@SpringBootApplication
 public class Main {
-    public static void main(String args[]) throws InterruptedException{
+    public static void main(String args[]) {
 
-
-        ICasino casino = new Casino(5);
-        casino.open();
-
-        IPlayer player = new Player(31,new RPSStrategy());
-        casino.enter(player,5);
-        player = new Player(15,new RPSStrategy());
-        casino.enter(player,3);
-
-        for(int i=0;i<10;i++) {
-            Thread.sleep(100); //let casino run for a while
-            List<IGame> games = casino.getGames();
-            System.out.println("Active Games");
-            games.stream().forEach(System.out::println);
-        }
-        casino.close();
-        int total = casino.getBalance();
-        System.out.println("Total income for the day "+total);
+        SpringApplication.run(Main.class, args);
     }
 }
