@@ -8,7 +8,7 @@ import static com.twm.casino.RPSMove.*;
 import static com.twm.casino.GameResult.*;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class RPSGame implements IGame{
     private static final Map<RPSMove, Map<RPSMove,GameResult>> matrix;
