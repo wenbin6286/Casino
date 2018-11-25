@@ -1,13 +1,13 @@
 package com.twm.casino;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class CasinoTest {
-
+    private final Logger logger = LoggerFactory.getLogger(CasinoTest.class);
     @Test
     public void testCasino() {
         ICasino casino = new Casino(5);
@@ -26,8 +26,8 @@ public class CasinoTest {
                 break;
             }
             List<IGame> games = casino.getGames();
-            System.out.println("Active Games");
-            games.stream().forEach(System.out::println);
+            logger.info("Active Games");
+            games.stream().forEach(g ->logger.info(g.toString()));
         }
         casino.close();
         int total = casino.getBalance();

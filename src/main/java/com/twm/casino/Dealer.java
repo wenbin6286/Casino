@@ -1,8 +1,11 @@
 package com.twm.casino;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Dealer implements IDealer, Runnable {
 
-
+    private final Logger logger = LoggerFactory.getLogger(Dealer.class);
     private final ICasino casino;
     public Dealer(ICasino casino) {
         this.casino = casino;
@@ -10,7 +13,7 @@ public class Dealer implements IDealer, Runnable {
     @Override
     public void run () {
         boolean alive = true;
-        System.out.println("Dealer: shift has started!");
+        logger.info("Dealer: shift has started!");
         while(alive) {
 
             try {
@@ -26,7 +29,7 @@ public class Dealer implements IDealer, Runnable {
 
             }
         }
-        System.out.println("Dealer: shift has ended!");
+        logger.info("Dealer: shift has ended!");
     }
 
 

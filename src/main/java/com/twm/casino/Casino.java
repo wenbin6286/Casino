@@ -3,6 +3,8 @@ package com.twm.casino;
 import com.twm.casino.exceptions.AlreadyInGameException;
 import com.twm.casino.exceptions.GameFullException;
 import com.twm.casino.exceptions.InsufficientFundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.*;
@@ -10,6 +12,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Casino implements ICasino{
+    private final Logger logger = LoggerFactory.getLogger(Casino.class);
     private final int numDealers;
     private final ExecutorService dealerPool;
     private final ExecutorService  playerPool;
@@ -60,7 +63,7 @@ public class Casino implements ICasino{
 
     private void playGame(IPlayer player) {
 
-        System.out.printf("There are  %d games to play %n",games.values().size());
+        logger.info("There are  {} games to play.",games.values().size());
         //try find an available game from active games
         for(IGame game:games.values()) {
             try {
@@ -83,7 +86,7 @@ public class Casino implements ICasino{
 
     }
     public  void close()  {
-        System.out.println("Casino is closing");
+        logger.info("Casino is closing");
         playerPool.shutdownNow();
         dealerPool.shutdownNow();
 

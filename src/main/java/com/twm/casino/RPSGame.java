@@ -3,6 +3,8 @@ package com.twm.casino;
 import com.twm.casino.exceptions.AlreadyInGameException;
 import com.twm.casino.exceptions.GameFullException;
 import com.twm.casino.exceptions.InsufficientFundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.twm.casino.RPSMove.*;
 import static com.twm.casino.GameResult.*;
@@ -11,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 
 
 public class RPSGame implements IGame{
+    private static final Logger logger = LoggerFactory.getLogger(RPSGame.class);
     private static final Map<RPSMove, Map<RPSMove,GameResult>> matrix;
     static {
         matrix = new EnumMap<>(RPSMove.class);
@@ -47,7 +50,7 @@ public class RPSGame implements IGame{
 
         players = new ArrayList<>(NUM_PLAYER);
         latch = new CountDownLatch(NUM_PLAYER);
-        System.out.printf("Game %s is created%n",gameId);
+        logger.info("Game {} is created.",gameId);
 
     }
     @Override
@@ -93,7 +96,7 @@ public class RPSGame implements IGame{
         else {
             //tie, no action.
         }
-        System.out.printf("Game %s is played %n",gameId);
+        logger.info("Game {} is played.",gameId);
         return moneyCollected; //return the remaining money to the dealer;
     }
 
