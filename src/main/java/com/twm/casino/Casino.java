@@ -102,4 +102,6 @@ public class Casino implements ICasino{
     public List<IPlayer> getPlayers() {
         return new ArrayList<>(players.values());
     }
+
+    public IGame nextGame() { return new RPSGame();}
 }

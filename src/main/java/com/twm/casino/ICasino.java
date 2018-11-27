@@ -13,5 +13,6 @@ public interface ICasino {
     void enter(IPlayer player,int n);
     int getBalance();
     List<IGame> getGames();
+    IGame nextGame();
 
 }

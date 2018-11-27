@@ -3,6 +3,9 @@ package com.twm.casino;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+
 public class Dealer implements IDealer, Runnable {
 
     private final Logger logger = LoggerFactory.getLogger(Dealer.class);
@@ -10,6 +13,8 @@ public class Dealer implements IDealer, Runnable {
     public Dealer(ICasino casino) {
         this.casino = casino;
     }
+
+
     @Override
     public void run () {
         boolean alive = true;
@@ -17,7 +22,7 @@ public class Dealer implements IDealer, Runnable {
         while(alive) {
 
             try {
-                IGame game = new RPSGame();
+                IGame game = casino.nextGame();
                 casino.startBetting(game);
                 game.waitForPlayers();
                 casino.stopBetting(game);
